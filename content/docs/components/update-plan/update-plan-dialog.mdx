@@ -1,0 +1,108 @@
+---
+title: Update Plan Dialog
+description: The Update Plan Dialog component provides an interactive interface for users to upgrade or change their subscription plan. It features plan comparison, monthly/yearly toggle, and smooth animations for a seamless user experience.
+---
+
+<Tabs items={['Preview', 'Code']} className="bg-transparent border-none">
+  <Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
+    <PreviewComponents registryName="update-plan-dialog">
+      <UpdatePlanDialogDemo />
+    </PreviewComponents>
+  </Tab>
+
+  <Tab value="Code" className="mt-3">
+  <include cwd lang="tsx" meta='title="src/components/update-plan-dialog-demo.tsx"'>src/components/update-plan-dialog-demo.tsx</include>
+
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Tabs items={['shadcn', 'billingSDK']} defaultValue="shadcn" className="bg-transparent border-none">
+  <Tab value="shadcn" className="border-none bg-transparent p-0 mt-3">
+    <Tabs items={['npx', 'pnpm', 'yarn', 'bun']} defaultValue="npx" groupId="installation-tabs">
+      <Tab value="npx">
+        ```bash
+        npx shadcn@latest add @billingsdk/update-plan-dialog
+        ```
+      </Tab>
+      <Tab value="pnpm">
+        ```bash
+        pnpm dlx shadcn@latest add @billingsdk/update-plan-dialog
+        ```
+      </Tab>
+      <Tab value="yarn">
+        ```bash
+        yarn dlx shadcn@latest add @billingsdk/update-plan-dialog
+        ```
+      </Tab>
+      <Tab value="bun">
+        ```bash
+        bunx shadcn@latest add @billingsdk/update-plan-dialog
+        ```
+      </Tab>
+    </Tabs>
+  </Tab>
+  <Tab value="billingSDK" className="border-none bg-transparent p-0 mt-3">
+    <Tabs items={['npx', 'pnpm', 'yarn', 'bun']} defaultValue="npx" groupId="billingsdk-cli-tabs">
+      <Tab value="npx">
+        ```bash
+        npx @billingsdk/cli add update-plan-dialog
+        ```
+      </Tab>
+      <Tab value="pnpm">
+        ```bash
+        pnpm dlx @billingsdk/cli add update-plan-dialog
+        ```
+      </Tab>
+      <Tab value="yarn">
+        ```bash
+        yarn dlx @billingsdk/cli add update-plan-dialog
+        ```
+      </Tab>
+      <Tab value="bun">
+        ```bash
+        bunx @billingsdk/cli add update-plan-dialog
+        ```
+      </Tab>
+    </Tabs>
+  </Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { UpdatePlanDialog } from "@/components/billingsdk/update-plan-dialog";
+import { plans } from "@/lib/billingsdk-config";
+```
+
+```tsx
+<UpdatePlanDialog
+  currentPlan={plans[0]}
+  plans={plans}
+  triggerText="Upgrade Plan"
+  onPlanChange={(planId) => {
+    // Handle plan change
+    console.log('Plan changed to:', planId);
+  }}
+  title="Choose Your Plan"
+/>
+```
+
+## Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `currentPlan` | `Plan` | ✅ | The user's current plan object |
+| `plans` | `Plan[]` | ✅ | Array of available plans to choose from |
+| `triggerText` | `string` | ✅ | Text displayed on the trigger button |
+| `onPlanChange` | `(planId: string) => void` | ✅ | Callback function when a plan is selected |
+| `className` | `string` | ❌ | Additional CSS classes for styling |
+| `title` | `string` | ❌ | Custom title for the dialog (default: "Upgrade Plan") |
+
+## Theming
+
+The update plan dialog component is styled using the `shadcn/ui` library. You can customize the colors and fonts by overriding the CSS variables. You can also get the theme from the [Theming](/docs/theming) page.
+
+## Example
+<include cwd lang="tsx" meta='title="src/components/update-plan-dialog-demo.tsx"'>src/components/update-plan-dialog-demo.tsx</include>

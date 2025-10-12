@@ -1,0 +1,359 @@
+---
+title: Billing Settings 2
+description: A comprehensive billing settings component with customizable input fields, feature toggles, currency selection, and built-in validation. Supports 180+ currencies and custom validation rules.
+---
+
+<Tabs items={["Preview", "Code"]} className="bg-transparent border-none">
+	<Tab value="Preview" className="border-none bg-transparent p-0 mt-3">
+		<PreviewComponents registryName="billingsdk">
+			<BillingSettings2Demo />
+		</PreviewComponents>
+	</Tab>
+
+    <Tab value="Code" className="mt-3">
+    	<include cwd lang="tsx" meta='title="src/components/billing-settings-2-demo.tsx"'>src/components/billing-settings-2-demo.tsx</include>
+    </Tab>
+
+</Tabs>
+
+### Installation
+
+<Tabs
+	items={['shadcn', 'billingSDK']}
+	defaultValue="shadcn"
+	className="bg-transparent border-none"
+>
+	<Tab value="shadcn" className="border-none bg-transparent p-0 mt-3">
+		<Tabs
+			items={['npx', 'pnpm', 'yarn', 'bun']}
+			defaultValue="npx"
+			groupId="installation-tabs"
+		>
+			<Tab value="npx">
+				```bash 
+				npx shadcn@latest add @billingsdk/billing-settings-2 
+				```
+			</Tab>
+			<Tab value="pnpm">
+				```bash 
+				pnpm dlx shadcn@latest add @billingsdk/billing-settings-2 
+				```
+			</Tab>
+			<Tab value="yarn">
+				```bash 
+				yarn dlx shadcn@latest add @billingsdk/billing-settings-2 
+				```
+			</Tab>
+			<Tab value="bun">
+				```bash 
+				bunx shadcn@latest add @billingsdk/billing-settings-2 
+				```
+			</Tab>
+		</Tabs>
+	</Tab>
+	<Tab value="billingSDK" className="border-none bg-transparent p-0 mt-3">
+		<Tabs
+			items={['npx', 'pnpm', 'yarn', 'bun']}
+			defaultValue="npx"
+			groupId="billingsdk-cli-tabs"
+		>
+			<Tab value="npx">
+				```bash 
+				npx @billingsdk/cli add billing-settings-2 
+				```
+			</Tab>
+			<Tab value="pnpm">
+				```bash 
+				pnpm dlx @billingsdk/cli add billing-settings-2 
+				```
+			</Tab>
+			<Tab value="yarn">
+				```bash 
+				yarn dlx @billingsdk/cli add billing-settings-2 
+				```
+			</Tab>
+			<Tab value="bun">
+				```bash 
+				bunx @billingsdk/cli add billing-settings-2 
+				```
+			</Tab>
+		</Tabs>
+	</Tab>
+</Tabs>
+
+## Usage
+
+```tsx
+import { BillingSettings2 } from '@/components/billingsdk/billing-settings-2';
+```
+
+```tsx
+<BillingSettings2
+	title="Custom Billing Settings"
+	enableValidation
+	currencyRequired
+	inputFields={[
+		{
+			id: "fullName",
+			name: "fullName",
+			value: inputValues.fullName,
+			placeholder: "Enter your full name",
+			onChange: (value) => handleInputChange('fullName', value),
+			label: "Full Name",
+			type: "text",
+			required: true,
+			validation: { 
+				minLength: 2, 
+				maxLength: 50,
+				customValidator: (value) => {
+					if (value && value.trim().length < 2) {
+						return "Name must be at least 2 characters";
+					}
+					return null;
+				}
+			},
+		},
+		{
+			id: "billingEmail",
+			name: "billingEmail",
+			value: inputValues.billingEmail,
+			placeholder: "user@example.com",
+			onChange: (value) => handleInputChange('billingEmail', value),
+			label: "Billing Email",
+			helperText: "Invoices will be sent to this email address",
+			type: "email",
+			required: true,
+		},
+		{
+			id: "taxId",
+			name: "taxId",
+			value: inputValues.taxId,
+			placeholder: "EU123456789",
+			onChange: (value) => handleInputChange('taxId', value),
+			label: "Tax ID (Optional)",
+			helperText: "For VAT or other tax purposes",
+			type: "text",
+			validation: { 
+				pattern: /^[A-Z]{2}\d{8,12}$/,
+				customValidator: (value) => {
+					if (value && !/^[A-Z]{2}\d{8,12}$/.test(value)) {
+						return "Tax ID format: XX followed by 8-12 digits";
+					}
+					return null;
+				}
+			},
+		},
+	]}
+	features={[
+		{
+			id: "auto-renewal",
+			label: "Auto-Renewal",
+			description: "Automatically renew your subscription",
+			enabled: featureToggles.autoRenewal,
+			onToggle: (enabled) => handleFeatureToggle('autoRenewal', enabled),
+		},
+		{
+			id: "invoice-emails",
+			label: "Invoice Emails",
+			description: "Receive emails when invoices are generated",
+			enabled: featureToggles.invoiceEmails,
+			onToggle: (enabled) => handleFeatureToggle('invoiceEmails', enabled),
+		},
+		{
+			id: "promotional-emails",
+			label: "Promotional Emails",
+			description: "Receive occasional updates about new features and offers",
+			enabled: featureToggles.promotionalEmails,
+			onToggle: (enabled) => handleFeatureToggle('promotionalEmails', enabled),
+		},
+	]}
+	// Option 1: Use specific currencies (string array)
+	currencies={['USD', 'EUR', 'GBP', 'CAD', 'AUD']}
+	// Option 2: Use custom currency options (overrides currencies prop)
+	// currencyOptions={[
+	// 	{ value: "usd", label: "USD - US Dollar" },
+	// 	{ value: "eur", label: "EUR - Euro" },
+	// 	{ value: "btc", label: "BTC - Bitcoin" },
+	// ]}
+	// Option 3: Leave both undefined for all 180+ currencies
+	defaultCurrency="usd"
+	onCurrencyChange={(value) => {
+		setSelectedCurrency(value);
+		// Additional logic: updatePricing(value), savePreference(value), etc.
+	}}
+	onSave={handleSave}
+	onCancel={handleCancel}
+	saveButtonText="Save Preferences"
+	cancelButtonText="Discard Changes"
+/>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | `"Billing Settings"` | The title displayed at the top of the component |
+| `features` | `FeatureToggle[]` | See below | Array of feature toggle configurations |
+| `inputFields` | `InputField[]` | See below | Array of input field configurations |
+| `onSave` | `() => void` | `() => {}` | Function called when save button is clicked |
+| `onCancel` | `() => void` | `() => {}` | Function called when cancel button is clicked |
+| `saveButtonText` | `string` | `"Save Changes"` | Text for the save button |
+| `cancelButtonText` | `string` | `"Cancel"` | Text for the cancel button |
+| `currencies` | `string[]` (optional) | `undefined` | Array of currency codes to show (e.g., `['USD', 'EUR', 'GBP']`). Shows all 180+ currencies if undefined |
+| `currencyOptions` | `{value: string, label: string}[]` (optional) | `undefined` | Custom currency options. Overrides `currencies` prop when provided |
+| `defaultCurrency` | `string` (optional) | `"USD"` | Default selected currency (case-insensitive) |
+| `onCurrencyChange` | `(value: string) => void` (optional) | `() => {}` | Function called when currency is changed |
+| `enableValidation` | `boolean` (optional) | `true` | Enables built-in validation and error display |
+| `currencyRequired` | `boolean` (optional) | `true` | Requires a currency selection when saving |
+| `className` | `string` | `undefined` | Additional CSS classes to apply |
+
+### FeatureToggle Object
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier for the feature |
+| `label` | `string` | Display label for the feature |
+| `description` | `string` | Description of what the feature does |
+| `enabled` | `boolean` | Current state of the feature toggle |
+| `onToggle` | `(enabled: boolean) => void` | Function called when toggle is switched |
+
+### InputField Object
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `id` | `string` | Unique identifier for the input field |
+| `name` | `string` | Name attribute for the input field |
+| `value` | `string` (optional) | Current value of the input field (controlled) |
+| `defaultValue` | `string` (optional) | Default value for uncontrolled input |
+| `placeholder` | `string` | Placeholder text for the input field |
+| `onChange` | `(value: string) => void` | Function called when input value changes |
+| `label` | `string` | Label displayed above the input field |
+| `helperText` | `string` (optional) | Helper text displayed below the input field |
+| `type` | `'text' \| 'email' \| 'tel' \| 'url' \| 'number'` | Type of input field |
+| `required` | `boolean` (optional) | Whether the field is required |
+| `validation` | `ValidationRules` (optional) | Optional validation rules object |
+
+### ValidationRules Object
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `minLength` | `number` (optional) | Minimum character length |
+| `maxLength` | `number` (optional) | Maximum character length |
+| `pattern` | `RegExp` (optional) | Regular expression pattern to match |
+| `customValidator` | `(value: string) => string \| null` (optional) | Custom validation function that returns error message or null |
+
+### Currency Configuration
+
+**All currency props are optional!** The component supports three different currency configuration modes:
+
+#### 1. All Currencies (Default)
+```tsx
+// Shows all 180+ currencies from currency-codes package
+<BillingSettings2 />
+```
+
+#### 2. Specific Currencies
+```tsx
+// Shows only specified currency codes
+<BillingSettings2 
+	currencies={['USD', 'EUR', 'GBP', 'CAD', 'AUD']}
+/>
+```
+
+#### 3. Custom Currency Options
+```tsx
+// Fully custom currency list (overrides currencies prop)
+<BillingSettings2 
+	currencyOptions={[
+		{ value: "usd", label: "USD - US Dollar" },
+		{ value: "eur", label: "EUR - Euro" },
+		{ value: "btc", label: "BTC - Bitcoin" },
+		{ value: "custom", label: "Custom Token" },
+	]}
+/>
+```
+
+> **Note:** When validation fails, the save button is disabled. It re-enables automatically as users correct invalid fields. Error messages are shown inline beneath each field.
+
+## Examples
+
+### Basic Setup
+```tsx
+import { BillingSettings2 } from '@/components/billingsdk/billing-settings-2';
+
+export function BasicBillingSettings() {
+  return (
+    <BillingSettings2
+      title="Account Settings"
+      onSave={() => console.log('Settings saved')}
+      onCancel={() => console.log('Changes cancelled')}
+    />
+  );
+}
+```
+
+### With Custom Validation
+```tsx
+const customValidator = (value: string) => {
+  if (value.includes('test')) {
+    return "Test values are not allowed";
+  }
+  return null;
+};
+
+<BillingSettings2
+  inputFields={[
+    {
+      id: "companyName",
+      name: "companyName", 
+      value: companyName,
+      onChange: setCompanyName,
+      label: "Company Name",
+      validation: {
+        minLength: 3,
+        customValidator
+      }
+    }
+  ]}
+/>
+```
+
+### Specific Currencies Only
+```tsx
+<BillingSettings2
+  currencies={['USD', 'EUR', 'GBP', 'JPY']}
+  defaultCurrency="usd"
+  onCurrencyChange={(currency) => {
+    // Update pricing, save preference, etc.
+    updatePricing(currency);
+  }}
+/>
+```
+
+### Disable Validation
+```tsx
+<BillingSettings2
+  enableValidation={false}
+  currencyRequired={false}
+  // Save button will always be enabled
+/>
+```
+
+## Features
+
+- **Built-in Validation**: Email validation, pattern matching, custom validators
+- **Currency Support**: 180+ currencies via currency-codes package
+- **Flexible Configuration**: Custom input fields and feature toggles
+- **Accessibility**: ARIA labels, keyboard navigation, screen reader support
+- **TypeScript**: Full type safety with TypeScript interfaces
+- **Responsive Design**: Works on mobile and desktop
+
+## Dependencies
+
+This component depends on:
+- `currency-codes`: For comprehensive currency data
+- `shadcn/ui`: Button, Card, Input, Label, Select, Switch components
+
+### Credits
+
+- Created by [@sapatmohit](https://github.com/sapatmohit) [@tsahil01](https://github.com/tsahil01) [@tejasnasre](https://github.com/tejasnasre)
