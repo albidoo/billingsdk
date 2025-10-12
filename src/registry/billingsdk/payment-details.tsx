@@ -40,7 +40,6 @@ const formatCardNumber = (value: string): string => {
   }
   return parts.length ? parts.join(" ") : number
 }
-
 /**
  * Formats an expiry date in MM/YY format
  */
